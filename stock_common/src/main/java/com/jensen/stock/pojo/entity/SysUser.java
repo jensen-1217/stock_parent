@@ -2,6 +2,8 @@ package com.jensen.stock.pojo.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -9,10 +11,12 @@ import lombok.Data;
  * @TableName sys_user
  */
 @Data
+@Schema(title = "用户基本信息")
 public class SysUser implements Serializable {
     /**
      * 用户id
      */
+    @Schema(title = "主键ID")
     private Long id;
 
     /**

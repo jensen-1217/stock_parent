@@ -1,5 +1,6 @@
 package com.jensen.stock.config;
 
+import com.jensen.stock.utils.IdWorker;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,5 +21,11 @@ public class CommonConfig {
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public IdWorker idWorker(){
+
+        return new IdWorker(1l,2l);
     }
 }
