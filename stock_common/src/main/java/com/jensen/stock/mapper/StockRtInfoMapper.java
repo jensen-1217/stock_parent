@@ -1,6 +1,15 @@
 package com.jensen.stock.mapper;
 
+import com.jensen.stock.pojo.domain.Stock4EvrDayDomain;
+import com.jensen.stock.pojo.domain.Stock4MinuteDomain;
+import com.jensen.stock.pojo.domain.StockUpdownDomain;
 import com.jensen.stock.pojo.entity.StockRtInfo;
+import org.apache.ibatis.annotations.MapKey;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
 * @author 59484
@@ -22,4 +31,34 @@ public interface StockRtInfoMapper {
 
     int updateByPrimaryKey(StockRtInfo record);
 
+    List<StockUpdownDomain> getNewestStockInfo(Date curDate);
+
+    List<StockUpdownDomain> getStockInfo(Date curDate);
+
+    @MapKey("{count,time}")
+    List<Map> getStockUpdownCount(@Param("openTime") Date openTime, @Param("curTime") Date curTime, @Param("flag") int flag);
+
+    List<Map> getStockUpDownSectionByTime(@Param("avlDate") Date avlDate);
+
+    /**
+     * 根据时间范围查询指定股票的交易流水
+     * @param stockCode 股票code
+     * @param startTime 起始时间
+     * @param endTime 终止时间
+     * @return
+     */
+    List<Stock4MinuteDomain> getStockInfoByCodeAndDate(@Param("stockCode") String stockCode,
+                                                       @Param("startTime") Date startTime,
+                                                       @Param("endTime") Date endTime);
+
+    /**
+     * 查询指定日期范围内指定股票每天的交易数据
+     * @param stockCode 股票code
+     * @param startTime 起始时间
+     * @param endTime 终止时间
+     * @return
+     */
+    List<Stock4EvrDayDomain> getStockInfo4EvrDay(@Param("stockCode") String stockCode,
+                                                 @Param("startTime") Date startTime,
+                                                 @Param("endTime") Date endTime);
 }

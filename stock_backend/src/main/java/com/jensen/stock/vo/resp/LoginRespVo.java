@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Schema(title = "登录响应封装")
+@Schema(title = "LoginRespVo")
 public class LoginRespVo {
     /**
      * 用户ID

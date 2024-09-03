@@ -10,11 +10,11 @@ import java.util.Date;
 /**
  * @author jensen
  * @date 2024-08-26 21:58
- * @description 定义大盘数据的领域对象
+ * @description 定义国外大盘数据的领域对象
  */
-@Schema(description = "定义大盘数据的领域对象")
+@Schema(description = "定义国外大盘数据的领域对象")
 @Data
-public class InnerMarketDomain {
+public class OuterMarketDomain {
 
     /**
      * 大盘编码
@@ -27,30 +27,10 @@ public class InnerMarketDomain {
     @Schema(title = "大盘名称")
     private String name;
     /**
-     * 开盘点
-     */
-    @Schema(title = "开盘点")
-    private BigDecimal openPoint;
-    /**
      * 当前点
      */
     @Schema(title = "当前点")
     private BigDecimal curPoint;
-    /**
-     * 前收盘点
-     */
-    @Schema(title = "前收盘点")
-    private BigDecimal preClosePoint;
-    /**
-     * 交易量
-     */
-    @Schema(title = "交易量")
-    private Long tradeAmt;
-    /**
-     * 交易金额
-     */
-    @Schema(title = "交易金额")
-    private Long tradeVol;
     /**
      * 涨跌值
      */
@@ -61,12 +41,6 @@ public class InnerMarketDomain {
      */
     @Schema(title = "涨幅")
     private BigDecimal rose;
-
-    /**
-     * 振幅
-     */
-    @Schema(title = "振幅")
-    private BigDecimal amplitude;
     /**
      * 当前时间
      */

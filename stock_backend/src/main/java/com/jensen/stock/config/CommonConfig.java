@@ -1,6 +1,8 @@
 package com.jensen.stock.config;
 
+import com.jensen.stock.pojo.vo.StockInfoConfig;
 import com.jensen.stock.utils.IdWorker;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * @Description 定义公共配置类
  */
 @Configuration
+@EnableConfigurationProperties({StockInfoConfig.class})
 public class CommonConfig {
     /**
      * 密码加密器

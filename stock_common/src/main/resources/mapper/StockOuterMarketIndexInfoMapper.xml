@@ -26,6 +26,18 @@
         from stock_outer_market_index_info
         where  id = #{id,jdbcType=BIGINT} 
     </select>
+    <select id="getMarket" resultType="com.jensen.stock.pojo.domain.OuterMarketDomain">
+        SELECT
+            somi.market_code AS code,
+            somi.market_name AS name,
+            somi.cur_point AS curPoint,
+            somi.updown AS upDown,
+            somi.rose AS rose,
+            somi.cur_time AS curTime
+        FROM stock_outer_market_index_info AS somi
+        WHERE
+            somi.cur_time = #{curDate};
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from stock_outer_market_index_info

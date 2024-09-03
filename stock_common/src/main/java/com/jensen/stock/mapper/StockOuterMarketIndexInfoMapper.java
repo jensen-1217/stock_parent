@@ -1,6 +1,10 @@
 package com.jensen.stock.mapper;
 
+import com.jensen.stock.pojo.domain.OuterMarketDomain;
 import com.jensen.stock.pojo.entity.StockOuterMarketIndexInfo;
+
+import java.util.Date;
+import java.util.List;
 
 /**
 * @author 59484
@@ -22,4 +26,5 @@ public interface StockOuterMarketIndexInfoMapper {
 
     int updateByPrimaryKey(StockOuterMarketIndexInfo record);
 
+    List<OuterMarketDomain> getMarket(Date curDate);
 }
