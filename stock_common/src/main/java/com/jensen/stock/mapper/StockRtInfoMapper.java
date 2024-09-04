@@ -38,6 +38,7 @@ public interface StockRtInfoMapper {
     @MapKey("{count,time}")
     List<Map> getStockUpdownCount(@Param("openTime") Date openTime, @Param("curTime") Date curTime, @Param("flag") int flag);
 
+    @MapKey("")
     List<Map> getStockUpDownSectionByTime(@Param("avlDate") Date avlDate);
 
     /**
