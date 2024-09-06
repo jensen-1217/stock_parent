@@ -2,6 +2,7 @@ package com.jensen.stock.service.impl;
 
 import com.alibaba.excel.EasyExcel;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.benmanes.caffeine.cache.Cache;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jensen.stock.mapper.*;
@@ -34,6 +35,12 @@ import java.util.stream.Collectors;
 @Slf4j
 public class StockServiceImpl implements StockService {
     @Autowired
+    private Cache<String,Object> caffeineCache;
+    /**
+     * 定义获取A股大盘最新数据
+     * @return
+     */
+    @Autowired
     private StockOuterMarketIndexInfoMapper stockOuterMarketIndexInfoMapper;
     @Autowired
     private StockBlockRtInfoMapper stockBlockRtInfoMapper;
@@ -48,16 +55,21 @@ public class StockServiceImpl implements StockService {
 
     @Override
     public R<List<InnerMarketDomain>> getInnerMarketInfo() {
-        //1.获取国内A股大盘的id集合
-        List<String> mCode = stockInfoConfig.getInner();
-        //2.获取最近股票交易日期
-        Date curDate = DateTimeUtil.getLastDate4Stock(DateTime.now()).toDate();
-        //TODO mock测试数据，后期数据通过第三方接口动态获取实时数据 可删除
-        curDate=DateTime.parse("2021-12-28 09:31:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
-        //3.将获取的java Date传入接口
-        List<InnerMarketDomain> data= stockMarketIndexInfoMapper.getMarketInfo(mCode,curDate);
-        //4.返回查询结果
-        return R.ok(data);
+
+        //从缓存中加载数据，如果不存在，则走补偿策略获取数据，并存入本地缓存
+        R<List<InnerMarketDomain>> result= (R<List<InnerMarketDomain>>) caffeineCache.get("innerMarketInfos", key-> {
+            //1.获取国内A股大盘的id集合
+            List<String> mCode = stockInfoConfig.getInner();
+            //2.获取最近股票交易日期
+            Date curDate = DateTimeUtil.getLastDate4Stock(DateTime.now()).toDate();
+            //TODO mock测试数据，后期数据通过第三方接口动态获取实时数据 可删除
+            curDate = DateTime.parse("2021-12-28 09:31:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
+            //3.将获取的java Date传入接口
+            List<InnerMarketDomain> data = stockMarketIndexInfoMapper.getMarketInfo(mCode, curDate);
+            //4.返回查询结果
+            return R.ok(data);
+        });
+        return result;
     }
 
     /**
@@ -361,4 +373,5 @@ public class StockServiceImpl implements StockService {
         //3.组装数据，响应
         return R.ok(data);
     }
+
 }

@@ -1,5 +1,7 @@
 package com.jensen.stock.config;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.jensen.stock.pojo.vo.StockInfoConfig;
 import com.jensen.stock.utils.IdWorker;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

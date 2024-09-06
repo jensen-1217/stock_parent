@@ -14,6 +14,7 @@ import com.jensen.stock.utils.IdWorker;
 import com.jensen.stock.utils.ParserStockInfoUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -56,6 +57,9 @@ public class StockTimerTaskServiceImpl implements StockTimerTaskService {
 
     @Autowired
     private StockMarketIndexInfoMapper stockMarketIndexInfoMapper;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     private HttpEntity<String> entity;
 
@@ -141,6 +145,8 @@ public class StockTimerTaskServiceImpl implements StockTimerTaskService {
         //TODO 后续完成批量插入功能
         int count= stockMarketIndexInfoMapper.insertBatch(list);
         if (count>0) {
+            //通知后台终端刷新本地缓存，发送的日期数据是告知对方当前更新的股票数据所在时间点
+            rabbitTemplate.convertAndSend("stockExchange","inner.market",new Date());
             log.info("当前时间：{},批量插入大盘数据：{}成功",DateTime.now().toString("yyyy-MM-dd HH:mm:ss"),list);
         }else {
             log.error("当前时间：{},批量插入大盘数据：{}失败",DateTime.now().toString("yyyy-MM-dd HH:mm:ss"),list);
