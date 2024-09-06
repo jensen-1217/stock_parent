@@ -5,6 +5,7 @@ import com.jensen.stock.pojo.entity.StockMarketIndexInfo;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -43,4 +44,6 @@ public interface StockMarketIndexInfoMapper {
     List<Map> getStockTradeVol(@Param("markedIds") List<String> markedIds,
                                @Param("startTime") Date startTime,
                                @Param("endTime") Date endTime);
+
+    int insertBatch(@Param("list") List<StockMarketIndexInfo> list);
 }

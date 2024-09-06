@@ -62,4 +62,10 @@ public interface StockRtInfoMapper {
     List<Stock4EvrDayDomain> getStockInfo4EvrDay(@Param("stockCode") String stockCode,
                                                  @Param("startTime") Date startTime,
                                                  @Param("endTime") Date endTime);
+
+    /**
+     * 批量插入功能
+     * @param stockRtInfoList
+     */
+    int insertBatch(List<StockRtInfo> stockRtInfoList);
 }
