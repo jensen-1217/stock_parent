@@ -1,8 +1,10 @@
 package com.jensen.stock.mapper;
 
 import com.jensen.stock.pojo.entity.StockBusiness;
+import org.apache.ibatis.annotations.MapKey;
 
 import java.util.List;
+import java.util.Map;
 
 /**
 * @author 59484
@@ -30,4 +32,6 @@ public interface StockBusinessMapper {
      */
     List<String> getStockIds();
 
+    @MapKey("")
+    List<Map> getStocksByCode(String searchStr);
 }

@@ -60,4 +60,11 @@ public interface StockService {
      * @param code 股票编码
      */
     R<List<Stock4EvrDayDomain>> stockCreenDkLine(String code);
+
+    /**
+     * 根据输入的个股代码，进行模糊查询，返回证券代码和证券名称
+     * @param searchStr
+     * @return
+     */
+    R<List<Map>> getStocksByCode(String searchStr);
 }

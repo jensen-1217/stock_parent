@@ -24,6 +24,7 @@ import org.springframework.util.CollectionUtils;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -372,6 +373,29 @@ public class StockServiceImpl implements StockService {
         List<Stock4EvrDayDomain> data= stockRtInfoMapper.getStockInfo4EvrDay(code,startTime,endTime);
         //3.组装数据，响应
         return R.ok(data);
+    }
+
+    /**
+     * 根据输入的个股代码，进行模糊查询，返回证券代码和证券名称
+     * @param searchStr
+     * @return
+     */
+    @Override
+    public R<List<Map>> getStocksByCode(String searchStr) {
+        //判断参数是不是为数字代码
+        String regex="^[0-9]+$";
+        Pattern pattern=Pattern.compile(regex);
+
+        if ("".equals(searchStr) || !pattern.matcher(searchStr).matches()) {
+            return R.error("请输入正确的股票代码");
+        }else {
+
+            // 从数据库获取股票数据
+            List<Map> data = stockBusinessMapper.getStocksByCode(searchStr);
+            System.out.println("搜索到的股票数据：" + data);
+            // 直接返回封装好的 R 对象
+            return R.ok(data);
+        }
     }
 
 }

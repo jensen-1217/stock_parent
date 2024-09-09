@@ -58,7 +58,6 @@ public class StockController {
      * 获取国外大盘最新数据
      * @return
      */
-
     @Operation(summary = "获取国外大盘最新数据", description = "获取国外大盘最新数据")
     @GetMapping("external/index")
     public R<List<OuterMarketDomain>> getOuterMarketInfo(){
@@ -69,7 +68,6 @@ public class StockController {
      * 股票涨幅统计
      * @return
      */
-
     @Parameters({
             @Parameter(name = "page", description = "", in = ParameterIn.QUERY),
             @Parameter(name = "pageSize", description = "", in = ParameterIn.QUERY)
@@ -155,8 +153,22 @@ public class StockController {
      * 单个个股日K 数据查询 ，可以根据时间区间查询数日的K线数据
      * @param stockCode 股票编码
      */
+    @Parameter(name = "code", description = "股票编码", in = ParameterIn.QUERY, required = true)
+    @Operation(summary = "单个个股日K 数据查询 ，可以根据时间区间查询数日的K线数据", description = "单个个股日K 数据查询 ，可以根据时间区间查询数日的K线数据")
     @GetMapping("/stock/screen/dkline")
     public R<List<Stock4EvrDayDomain>> getDayKLinData(@RequestParam(value = "code",required = true) String stockCode){
         return stockService.stockCreenDkLine(stockCode);
+    }
+
+    /**
+     * 根据输入的个股代码，进行模糊查询，返回证券代码和证券名称
+     * @param searchStr
+     * @return
+     */
+    @Parameter(name = "searchStr", description = "", in = ParameterIn.QUERY, required = true)
+    @Operation(summary = "根据输入的个股代码，进行模糊查询，返回证券代码和证券名称", description = "根据输入的个股代码，进行模糊查询，返回证券代码和证券名称")
+    @GetMapping("/stock/search")
+    public R<List<Map>> getStocksByCode(@RequestParam(value = "searchStr",required = true) String searchStr){
+        return stockService.getStocksByCode(searchStr);
     }
 }
