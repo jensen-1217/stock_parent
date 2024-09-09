@@ -1,0 +1,15 @@
+# XXJOB参数配置
+xxl:
+  job:
+    accessToken:
+    admin:
+      addresses: http://43.163.230.128:8093/xxl-job-admin
+    executor:
+      appname: jensen-stock-job-executor
+      address: http://m5vjar.natappfree.cc
+      ip:
+      port: 7878
+      logpath: .\logs
+      logretentiondays: 30
+logging:
+  config: classpath:logback.xml

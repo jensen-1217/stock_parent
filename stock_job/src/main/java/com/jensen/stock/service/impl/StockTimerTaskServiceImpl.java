@@ -17,6 +17,7 @@ import org.joda.time.DateTime;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
@@ -38,6 +39,8 @@ import java.util.stream.Collectors;
 @Service("stockTimerTaskService")
 @Slf4j
 public class StockTimerTaskServiceImpl implements StockTimerTaskService {
+    @Autowired
+    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
     @Autowired
     private StockRtInfoMapper stockRtInfoMapper;
     //注入格式解析bean
@@ -172,27 +175,73 @@ public class StockTimerTaskServiceImpl implements StockTimerTaskService {
 //        headers.add("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36");
 //        HttpEntity<String> entity = new HttpEntity<>(headers);
         //一次性查询过多，我们将需要查询的数据先进行分片处理，每次最多查询20条股票数据
+        long startTime = System.currentTimeMillis();
         Lists.partition(stockIds,20).forEach(list->{
-            //拼接股票url地址
-            String stockUrl=stockInfoConfig.getMarketUrl()+String.join(",",list);
-            //获取响应数据
-            String result = restTemplate.postForObject(stockUrl,entity,String.class);
-            ResponseEntity<String> responseEntity = restTemplate.exchange(stockUrl, HttpMethod.GET, entity, String.class);
-            int statusCodeValue = responseEntity.getStatusCodeValue();
-            if (statusCodeValue != 200) {
-                log.error("点前时间点：{},采集数据失败，http状态码：{}", DateTime.now().toString("yyyy-MM-dd HH:mm:ss"), statusCodeValue);
-                return;
-            }
-            List<StockRtInfo> infos = parserStockInfoUtil.parser4StockOrMarketInfo(result, ParseType.ASHARE);
-            log.info("数据：{}",infos);
-            //TODO 批量插入
-            int count = stockRtInfoMapper.insertBatch(infos);
-            if (count>0) {
-                log.info("当前时间：{},批量插入个股数据：{}成功",DateTime.now().toString("yyyy-MM-dd HH:mm:ss"),infos);
-            }else {
-                log.error("当前时间：{},批量插入个股数据：{}失败",DateTime.now().toString("yyyy-MM-dd HH:mm:ss"),infos);
-            }
+//            //拼接股票url地址
+//            String stockUrl=stockInfoConfig.getMarketUrl()+String.join(",",list);
+//            //获取响应数据
+//            String result = restTemplate.postForObject(stockUrl,entity,String.class);
+//            ResponseEntity<String> responseEntity = restTemplate.exchange(stockUrl, HttpMethod.GET, entity, String.class);
+//            int statusCodeValue = responseEntity.getStatusCodeValue();
+//            if (statusCodeValue != 200) {
+//                log.error("点前时间点：{},采集数据失败，http状态码：{}", DateTime.now().toString("yyyy-MM-dd HH:mm:ss"), statusCodeValue);
+//                return;
+//            }
+//            List<StockRtInfo> infos = parserStockInfoUtil.parser4StockOrMarketInfo(result, ParseType.ASHARE);
+//            log.info("数据：{}",infos);
+//            int count = stockRtInfoMapper.insertBatch(infos);
+//            if (count>0) {
+//                log.info("当前时间：{},批量插入个股数据：{}成功",DateTime.now().toString("yyyy-MM-dd HH:mm:ss"),infos);
+//            }else {
+//                log.error("当前时间：{},批量插入个股数据：{}失败",DateTime.now().toString("yyyy-MM-dd HH:mm:ss"),infos);
+//            }
+//            //方案2：
+//            new Thread(()->{
+//                //拼接股票url地址
+//                String stockUrl=stockInfoConfig.getMarketUrl()+String.join(",",list);
+//                //获取响应数据
+//                String result = restTemplate.postForObject(stockUrl,entity,String.class);
+//                ResponseEntity<String> responseEntity = restTemplate.exchange(stockUrl, HttpMethod.GET, entity, String.class);
+//                int statusCodeValue = responseEntity.getStatusCodeValue();
+//                if (statusCodeValue != 200) {
+//                    log.error("点前时间点：{},采集数据失败，http状态码：{}", DateTime.now().toString("yyyy-MM-dd HH:mm:ss"), statusCodeValue);
+//                    return;
+//                }
+//                List<StockRtInfo> infos = parserStockInfoUtil.parser4StockOrMarketInfo(result, ParseType.ASHARE);
+//                log.info("数据：{}",infos);
+//                //TODO 批量插入
+//                int count = stockRtInfoMapper.insertBatch(infos);
+//                if (count>0) {
+//                    log.info("当前时间：{},批量插入个股数据：{}成功",DateTime.now().toString("yyyy-MM-dd HH:mm:ss"),infos);
+//                }else {
+//                    log.error("当前时间：{},批量插入个股数据：{}失败",DateTime.now().toString("yyyy-MM-dd HH:mm:ss"),infos);
+//                }
+//            }).start();
+            //方案3：
+            threadPoolTaskExecutor.execute(()->{
+                //拼接股票url地址
+                String stockUrl=stockInfoConfig.getMarketUrl()+String.join(",",list);
+                //获取响应数据
+                String result = restTemplate.postForObject(stockUrl,entity,String.class);
+                ResponseEntity<String> responseEntity = restTemplate.exchange(stockUrl, HttpMethod.GET, entity, String.class);
+                int statusCodeValue = responseEntity.getStatusCodeValue();
+                if (statusCodeValue != 200) {
+                    log.error("点前时间点：{},采集数据失败，http状态码：{}", DateTime.now().toString("yyyy-MM-dd HH:mm:ss"), statusCodeValue);
+                    return;
+                }
+                List<StockRtInfo> infos = parserStockInfoUtil.parser4StockOrMarketInfo(result, ParseType.ASHARE);
+                log.info("数据：{}",infos);
+                //TODO 批量插入
+                int count = stockRtInfoMapper.insertBatch(infos);
+                if (count>0) {
+                    log.info("当前时间：{},批量插入个股数据：{}成功",DateTime.now().toString("yyyy-MM-dd HH:mm:ss"),infos);
+                }else {
+                    log.error("当前时间：{},批量插入个股数据：{}失败",DateTime.now().toString("yyyy-MM-dd HH:mm:ss"),infos);
+                }
+            });
         });
+        long takeTime = System.currentTimeMillis()-startTime;
+        log.info("本次采集花费时间：{}",takeTime);
     }
 
     @PostConstruct

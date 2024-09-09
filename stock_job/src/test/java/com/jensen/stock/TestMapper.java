@@ -36,7 +36,8 @@ public class TestMapper {
     }
 
     @Test
-    public void test02(){
+    public void test02() throws InterruptedException {
         stockTimerTaskService.getStockRtIndex();
+        Thread.sleep(5000);
     }
 }
