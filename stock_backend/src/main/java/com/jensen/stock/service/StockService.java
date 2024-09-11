@@ -81,4 +81,11 @@ public interface StockService {
      * @return
      */
     R<List<Stock4WeekDomain>> stockCreenWkLine(String code);
+
+    /**
+     * 获取个股最新分时行情数据
+     * @param code
+     * @return
+     */
+    R<Map> getStockSecondDetail(String code);
 }

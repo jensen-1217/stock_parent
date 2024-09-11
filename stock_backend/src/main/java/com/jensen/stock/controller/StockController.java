@@ -192,4 +192,14 @@ public class StockController {
         return stockService.stockCreenWkLine(code);
     }
 
+    /**
+     * 获取个股最新分时行情数据，主要包含：
+     * 	开盘价、前收盘价、最新价、最高价、最低价、成交金额和成交量、交易时间信息;
+     * @param code
+     * @return
+     */
+    @GetMapping("/stock/screen/second/detail")
+    public R<Map> getStockSecondDetail(@RequestParam(value = "code",required = true) String code){
+        return stockService.getStockSecondDetail(code);
+    }
 }

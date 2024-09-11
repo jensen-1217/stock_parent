@@ -90,4 +90,13 @@ public interface StockRtInfoMapper {
      */
     List<BigDecimal> getStockInfoByCodeAndTimes(@Param("code") String code,
                                                 @Param("times") List<Date> times);
+
+    /**
+     * 获取个股票最分时新行情数据
+     * @param code
+     * @param endDate
+     * @return
+     */
+    Map<String, String> getStockNewPriceByCode(@Param("code") String code,
+                                               @Param("endDate") Date endDate);
 }

@@ -182,6 +182,13 @@
         ORDER BY
             sri.cur_time ASC ;
     </select>
+    <select id="getStockNewPriceByCode" resultType="java.util.Map">
+        select trade_amount as tradeAmt,pre_close_price as preClosePrice,
+               min_price as lowPrice,max_price as highPrice,open_price as openPrice,
+               trade_volume as tradeVol,cur_price as tradePrice,DATE_FORMAT(cur_time,'%Y-%m-%d %H:%i') as curDate
+        from stock_rt_info
+        where stock_code=#{code} and cur_time=#{endDate}
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from stock_rt_info

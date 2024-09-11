@@ -13,6 +13,7 @@ import com.jensen.stock.utils.DateTimeUtil;
 import com.jensen.stock.vo.resp.PageResult;
 import com.jensen.stock.vo.resp.R;
 import com.jensen.stock.vo.resp.ResponseCode;
+import com.mysql.cj.util.DataTypeUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
@@ -466,6 +467,22 @@ public class StockServiceImpl implements StockService {
             data.get(i).setClosePrice(closePrices.get(i));
         }
         return R.ok(data);
+    }
+
+    /**
+     * 获取个股票最分时新行情数据
+     * @param code
+     * @return
+     */
+    @Override
+    public R<Map> getStockSecondDetail(String code) {
+        //获取股票最新的有效交易时间
+        DateTime dataTime = DateTimeUtil.getLastDate4Stock(DateTime.now());
+        Date endDate = dataTime.toDate();
+        //TODO  mock数据
+//        endDate=DateTime.parse("2022-01-05 09:47:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
+        Map stockNewPrice =stockRtInfoMapper.getStockNewPriceByCode(code,endDate);
+        return R.ok(stockNewPrice);
     }
 
 }
