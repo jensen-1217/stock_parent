@@ -437,6 +437,11 @@ public class StockServiceImpl implements StockService {
         return R.ok(data);
     }
 
+    /**
+     * 个股周k图展示
+     * @param code
+     * @return
+     */
     @Override
     public R<List<Stock4WeekDomain>> stockCreenWkLine(String code) {
         //获取截止时间

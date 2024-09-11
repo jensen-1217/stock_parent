@@ -182,6 +182,11 @@ public class StockController {
         return stockService.getStockDescribe(code);
     }
 
+    /**
+     * 个股周K图展示
+     * @param code
+     * @return
+     */
     @GetMapping("/stock/screen/weekkline")
     public R<List<Stock4WeekDomain>> getWeekKLine(@RequestParam(value = "code",required = true) String code){
         return stockService.stockCreenWkLine(code);

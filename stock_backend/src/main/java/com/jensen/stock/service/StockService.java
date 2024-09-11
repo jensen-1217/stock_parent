@@ -68,7 +68,17 @@ public interface StockService {
      */
     R<List<Map>> getStocksByCode(String searchStr);
 
+    /**
+     * 获取股票描述
+     * @param code
+     * @return
+     */
     R<Map> getStockDescribe(String code);
 
+    /**
+     * 个股周K功能实现
+     * @param code
+     * @return
+     */
     R<List<Stock4WeekDomain>> stockCreenWkLine(String code);
 }

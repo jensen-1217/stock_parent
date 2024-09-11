@@ -71,10 +71,23 @@ public interface StockRtInfoMapper {
      */
     int insertBatch(List<StockRtInfo> stockRtInfoList);
 
+    /**
+     * 个股周K图
+     * @param code
+     * @param starTime
+     * @param endTime
+     * @return
+     */
     List<Stock4WeekDomain> getStockCreenWkLine(@Param("code") String code,
                                                @Param("starTime") Date starTime,
                                                @Param("endTime") Date endTime);
 
+    /**
+     * 根据编码和时间查询当前价
+     * @param code
+     * @param times
+     * @return
+     */
     List<BigDecimal> getStockInfoByCodeAndTimes(@Param("code") String code,
                                                 @Param("times") List<Date> times);
 }
