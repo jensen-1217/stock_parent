@@ -149,6 +149,39 @@
           and sri2.stock_code=#{stockCode}
         order by sri2.cur_time
     </select>
+    <select id="getStockCreenWkLine" resultType="com.jensen.stock.pojo.domain.Stock4WeekDomain">
+        SELECT
+            avg( cur_price ) AS avgPrice,
+            min( cur_price ) AS minPrice,
+            MAX( cur_price ) AS maxPrice,
+            MAX( cur_time ) AS mxTime,
+            MIN( cur_time ) AS minTime,
+            stock_code AS stockCode
+        FROM
+            stock_rt_info
+        WHERE
+            stock_code = #{code}
+          AND cur_time BETWEEN #{starTime}
+            AND #{endTime}
+        GROUP BY
+            date_format( cur_time, '%Y%m%U' )
+        ORDER BY
+            mxTime ASC;
+    </select>
+    <select id="getStockInfoByCodeAndTimes" resultType="java.math.BigDecimal">
+        SELECT
+            sri.cur_price
+        FROM
+            stock_rt_info AS sri
+        WHERE
+            sri.stock_code = #{code}
+          AND sri.cur_time IN
+              <foreach collection="times" item="timePoint" separator="," open="(" close=")">
+                  #{timePoint}
+              </foreach>
+        ORDER BY
+            sri.cur_time ASC ;
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from stock_rt_info

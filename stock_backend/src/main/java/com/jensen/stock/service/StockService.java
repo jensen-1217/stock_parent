@@ -67,4 +67,8 @@ public interface StockService {
      * @return
      */
     R<List<Map>> getStocksByCode(String searchStr);
+
+    R<Map> getStockDescribe(String code);
+
+    R<List<Stock4WeekDomain>> stockCreenWkLine(String code);
 }

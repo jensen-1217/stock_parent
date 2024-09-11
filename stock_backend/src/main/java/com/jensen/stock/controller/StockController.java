@@ -171,4 +171,20 @@ public class StockController {
     public R<List<Map>> getStocksByCode(@RequestParam(value = "searchStr",required = true) String searchStr){
         return stockService.getStocksByCode(searchStr);
     }
+
+    /**
+     * 个股描述
+     * @param code
+     * @return
+     */
+    @GetMapping("/stock/describe")
+    public R<Map> getStockDescribe(@RequestParam(value = "code",required = true) String code){
+        return stockService.getStockDescribe(code);
+    }
+
+    @GetMapping("/stock/screen/weekkline")
+    public R<List<Stock4WeekDomain>> getWeekKLine(@RequestParam(value = "code",required = true) String code){
+        return stockService.stockCreenWkLine(code);
+    }
+
 }

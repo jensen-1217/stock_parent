@@ -6,7 +6,7 @@ xxl:
       addresses: http://43.163.230.128:8093/xxl-job-admin
     executor:
       appname: jensen-stock-job-executor
-      address: http://sva3yq.natappfree.cc
+      address: http://nse6kp.natappfree.cc
       ip:
       port: 7878
       logpath: .\logs

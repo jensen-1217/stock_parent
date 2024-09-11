@@ -2,11 +2,13 @@ package com.jensen.stock.mapper;
 
 import com.jensen.stock.pojo.domain.Stock4EvrDayDomain;
 import com.jensen.stock.pojo.domain.Stock4MinuteDomain;
+import com.jensen.stock.pojo.domain.Stock4WeekDomain;
 import com.jensen.stock.pojo.domain.StockUpdownDomain;
 import com.jensen.stock.pojo.entity.StockRtInfo;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -68,4 +70,11 @@ public interface StockRtInfoMapper {
      * @param stockRtInfoList
      */
     int insertBatch(List<StockRtInfo> stockRtInfoList);
+
+    List<Stock4WeekDomain> getStockCreenWkLine(@Param("code") String code,
+                                               @Param("starTime") Date starTime,
+                                               @Param("endTime") Date endTime);
+
+    List<BigDecimal> getStockInfoByCodeAndTimes(@Param("code") String code,
+                                                @Param("times") List<Date> times);
 }

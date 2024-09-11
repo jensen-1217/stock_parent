@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -54,6 +55,10 @@ public class StockServiceImpl implements StockService {
     @Autowired
     private StockRtInfoMapper stockRtInfoMapper;
 
+    /**
+     * 国内指数
+     * @return
+     */
     @Override
     public R<List<InnerMarketDomain>> getInnerMarketInfo() {
 
@@ -74,7 +79,7 @@ public class StockServiceImpl implements StockService {
     }
 
     /**
-     *需求说明: 沪深两市板块分时行情数据查询，以交易时间和交易总金额降序查询，取前10条数据
+     *需求说明: 沪深两市板块分时行情数据查询，以交易时间和交易总金额降序查询，取前10条数据,板块指数
      * @return
      */
     @Override
@@ -92,6 +97,10 @@ public class StockServiceImpl implements StockService {
         return R.ok(infos);
     }
 
+    /**
+     * 外盘指数
+     * @return
+     */
     @Override
     public R<List<OuterMarketDomain>> getOuterMarketInfo() {
         Date curDate = DateTimeUtil.getLastDate4Stock(DateTime.now()).toDate();
@@ -101,6 +110,12 @@ public class StockServiceImpl implements StockService {
         return R.ok(data);
     }
 
+    /**
+     * 涨幅榜分页查看更多
+     * @param page
+     * @param pageSize
+     * @return
+     */
     @Override
     public R<PageResult> getStockPageInfo(Integer page, Integer pageSize) {
 
@@ -117,6 +132,10 @@ public class StockServiceImpl implements StockService {
         return R.ok(pageResult);
     }
 
+    /**
+     * 涨幅榜显示前四
+     * @return
+     */
     @Override
     public R<List<StockUpdownDomain>> getStockInfo() {
         Date curDate = DateTimeUtil.getLastDate4Stock(DateTime.now()).toDate();
@@ -206,6 +225,10 @@ public class StockServiceImpl implements StockService {
         }
     }
 
+    /**
+     *成交量
+     * @return
+     */
     @Override
     public R<Map> stockTradeVol4InnerMarket() {
         //1.获取T日和T-1日的开始时间和结束时间
@@ -252,6 +275,10 @@ public class StockServiceImpl implements StockService {
         return R.ok(info);
     }
 
+    /**
+     * 个股涨跌
+     * @return
+     */
     @Override
     public R<Map> stockUpDownScopeCount() {
        /* //1.获取股票最新一次交易的时间点
@@ -273,7 +300,7 @@ public class StockServiceImpl implements StockService {
 
         //1.获取股票最新一次交易的时间点
         Date curDate = DateTimeUtil.getLastDate4Stock(DateTime.now()).toDate();
-        //mock data
+        //TODO：mock data
         curDate=DateTime.parse("2022-01-06 09:55:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
         //2.查询股票信息
         List<Map> maps=stockRtInfoMapper.getStockUpDownSectionByTime(curDate);
@@ -333,13 +360,13 @@ public class StockServiceImpl implements StockService {
         DateTime lastDate4Stock = DateTimeUtil.getLastDate4Stock(DateTime.now());
         Date endTime = lastDate4Stock.toDate();
         //TODO mockdata
-        endTime=DateTime.parse("2021-12-30 14:47:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
+//        endTime=DateTime.parse("2021-12-30 14:47:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
 
         //1.2 获取最近有效时间点对应的开盘日期
         DateTime openDateTime = DateTimeUtil.getOpenDate(lastDate4Stock);
         Date startTime = openDateTime.toDate();
         //TODO MOCK DATA
-        startTime=DateTime.parse("2021-12-30 09:30:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
+//        startTime=DateTime.parse("2021-12-30 09:30:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
         //2.根据股票code和日期范围查询
         List<Stock4MinuteDomain> list=stockRtInfoMapper.getStockInfoByCodeAndDate(code,startTime,endTime);
         //判断非空处理
@@ -363,12 +390,12 @@ public class StockServiceImpl implements StockService {
         DateTime endDateTime = DateTimeUtil.getLastDate4Stock(DateTime.now());
         Date endTime = endDateTime.toDate();
         //TODO MOCKDATA
-        endTime=DateTime.parse("2022-06-06 14:25:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
+//        endTime=DateTime.parse("2022-06-06 14:25:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
         //1.2 获取开始时间
         DateTime startDateTime = endDateTime.minusDays(10);
         Date startTime = startDateTime.toDate();
         //TODO MOCKDATA
-        startTime=DateTime.parse("2022-01-01 09:30:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
+//        startTime=DateTime.parse("2022-01-01 09:30:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
         //2.调用mapper接口获取查询的集合信息-方案1
         List<Stock4EvrDayDomain> data= stockRtInfoMapper.getStockInfo4EvrDay(code,startTime,endTime);
         //3.组装数据，响应
@@ -396,6 +423,44 @@ public class StockServiceImpl implements StockService {
             // 直接返回封装好的 R 对象
             return R.ok(data);
         }
+    }
+
+    /**
+     * 个股主营业务查询描述
+     * @param code
+     * @return
+     */
+    @Override
+    public R<Map> getStockDescribe(String code) {
+        Map<String,String>data=stockBusinessMapper.getStockDescribe(code);
+        System.out.println(data);
+        return R.ok(data);
+    }
+
+    @Override
+    public R<List<Stock4WeekDomain>> stockCreenWkLine(String code) {
+        //获取截止时间
+        DateTime endDateTime = DateTime.now();
+        Date endTime =endDateTime.toDate();
+        //TODO:MOCKDATA
+        endTime=DateTime.parse("2021-12-31 15:00:00",DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
+       //获取开始时间
+        Date starTime=endDateTime.minusWeeks(10).toDate();
+        //TODO:MOCKDATA
+        starTime=DateTime.parse("2021-12-01 09:30:00",DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
+        List<Stock4WeekDomain> data=stockRtInfoMapper.getStockCreenWkLine(code,starTime,endTime);
+        System.out.println(data);
+        //获取每周开盘时间
+        List<Date> everyOpenTime = data.stream().map(info -> info.getMinTime()).collect(Collectors.toList());
+        //获取每周收盘时间
+        List<Date> everyCloseTime = data.stream().map(info -> info.getMxTime()).collect(Collectors.toList());
+        List<BigDecimal> openPrices=stockRtInfoMapper.getStockInfoByCodeAndTimes(code,everyOpenTime);
+        List<BigDecimal> closePrices=stockRtInfoMapper.getStockInfoByCodeAndTimes(code,everyCloseTime);
+        for (int i = 0; i < data.size(); i++) {
+            data.get(i).setOpenPrice(openPrices.get(i));
+            data.get(i).setClosePrice(closePrices.get(i));
+        }
+        return R.ok(data);
     }
 
 }
