@@ -1,7 +1,10 @@
 package com.jensen.stock.mapper;
 
+import com.jensen.stock.pojo.domain.UserPageListInfoDomain;
 import com.jensen.stock.pojo.entity.SysUser;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * @author 59484
@@ -24,4 +27,6 @@ public interface SysUserMapper {
     int updateByPrimaryKey(SysUser record);
 
     SysUser findUserInfoByUserName(@Param("userName") String userName);
+
+    List<UserPageListInfoDomain> findUserAllInfoByPage(@Param("userName") String username, @Param("nickName") String nickName, @Param("startTime") String startTime, @Param("endTime") String endTime);
 }

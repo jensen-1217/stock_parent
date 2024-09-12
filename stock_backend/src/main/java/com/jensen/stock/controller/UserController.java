@@ -3,7 +3,9 @@ package com.jensen.stock.controller;
 import com.jensen.stock.pojo.entity.SysUser;
 import com.jensen.stock.service.UserService;
 import com.jensen.stock.vo.req.LoginReqVo;
+import com.jensen.stock.vo.req.UserPageReqVo;
 import com.jensen.stock.vo.resp.LoginRespVo;
+import com.jensen.stock.vo.resp.PageResult;
 import com.jensen.stock.vo.resp.R;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -51,5 +53,10 @@ public class UserController {
     @GetMapping("/captcha")
     public R<Map> getCaptchaCode(){
         return userService.getCaptchaCode();
+    }
+
+    @PostMapping("/users")
+    public R<PageResult> getUserListPage(@RequestBody UserPageReqVo userPageReqVo){
+        return userService.getUserListPage(userPageReqVo);
     }
 }

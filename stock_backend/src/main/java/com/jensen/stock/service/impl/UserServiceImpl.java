@@ -3,19 +3,20 @@ package com.jensen.stock.service.impl;
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.LineCaptcha;
 import cn.hutool.captcha.generator.CodeGenerator;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.google.common.base.Strings;
 import com.jensen.stock.constant.StockConstant;
 import com.jensen.stock.mapper.SysUserMapper;
+import com.jensen.stock.pojo.domain.UserPageListInfoDomain;
 import com.jensen.stock.pojo.entity.SysPermission;
 import com.jensen.stock.pojo.entity.SysUser;
 import com.jensen.stock.service.PermissionService;
 import com.jensen.stock.service.UserService;
 import com.jensen.stock.utils.IdWorker;
 import com.jensen.stock.vo.req.LoginReqVo;
-import com.jensen.stock.vo.resp.LoginRespPermission;
-import com.jensen.stock.vo.resp.LoginRespVo;
-import com.jensen.stock.vo.resp.R;
-import com.jensen.stock.vo.resp.ResponseCode;
+import com.jensen.stock.vo.req.UserPageReqVo;
+import com.jensen.stock.vo.resp.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -115,5 +116,19 @@ public class UserServiceImpl implements UserService {
         data.put("imageData",imageData);
         data.put("sessionId",sessionId);
         return R.ok(data);
+    }
+    /**
+     * 多条件查询用户分页信息条件包含：分页信息 用户创建日期范围
+     * @param userPageReqVo
+     * @return
+     */
+    @Override
+    public R<PageResult> getUserListPage(UserPageReqVo userPageReqVo) {
+//分别线获取前端传来的页码以及每页显示多少条数据
+        PageHelper.startPage(userPageReqVo.getPageNum(),userPageReqVo.getPageSize());
+        List<UserPageListInfoDomain> users = sysUserMapper.findUserAllInfoByPage(userPageReqVo.getUsername(),userPageReqVo.getNickName(),userPageReqVo.getStartTime(),userPageReqVo.getEndTime());
+        //将返回的结果集封装到PageInfo中
+        PageResult<UserPageListInfoDomain> pageResult = new PageResult<>(new PageInfo<>(users));
+        return R.ok(pageResult);
     }
 }
