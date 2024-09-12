@@ -1,6 +1,9 @@
 package com.jensen.stock.mapper;
 
 import com.jensen.stock.pojo.entity.SysPermission;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * @author 59484
@@ -22,4 +25,5 @@ public interface SysPermissionMapper {
 
     int updateByPrimaryKey(SysPermission record);
 
+    List<SysPermission> findPermissionsByUserId(@Param("id") Long id);
 }
