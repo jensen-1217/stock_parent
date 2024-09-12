@@ -16,7 +16,7 @@ public class PageResult<T> implements Serializable {
      * 总记录数
      */
     @Schema(description = "总记录数")
-    private Long totalRows;
+    private Integer totalRows;
 
     /**
      * 总页数
@@ -51,7 +51,8 @@ public class PageResult<T> implements Serializable {
      * @return
      */
     public PageResult(PageInfo<T> pageInfo) {
-        totalRows = pageInfo.getTotal();
+      //  totalRows = Long.valueOf(pageInfo.getTotal()).intValue();
+        totalRows = (int)pageInfo.getTotal();
         totalPages = pageInfo.getPages();
         pageNum = pageInfo.getPageNum();
         pageSize = pageInfo.getPageSize();
