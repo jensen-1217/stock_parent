@@ -485,4 +485,15 @@ public class StockServiceImpl implements StockService {
         return R.ok(stockNewPrice);
     }
 
+    /**
+     * 个股交易流水行情数据查询--查询最新交易流水，按照交易时间降序取前10
+     * @param code
+     * @return
+     */
+    @Override
+    public R<List<Map>> getStockScreenSecond(String code) {
+        List<Map> data=stockRtInfoMapper.getStockScreenSecond(code);
+        return R.ok(data);
+    }
+
 }

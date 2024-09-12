@@ -202,4 +202,14 @@ public class StockController {
     public R<Map> getStockSecondDetail(@RequestParam(value = "code",required = true) String code){
         return stockService.getStockSecondDetail(code);
     }
+
+    /**
+     * 个股交易流水行情数据查询--查询最新交易流水，按照交易时间降序取前10
+     * @param code
+     * @return
+     */
+    @GetMapping("/stock/screen/second")
+    public  R<List<Map>> getStockScreenSecond(@RequestParam(value = "code",required = true) String code){
+        return stockService.getStockScreenSecond(code);
+    }
 }

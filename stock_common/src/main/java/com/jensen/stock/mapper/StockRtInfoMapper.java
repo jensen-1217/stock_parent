@@ -37,10 +37,8 @@ public interface StockRtInfoMapper {
 
     List<StockUpdownDomain> getStockInfo(Date curDate);
 
-    @MapKey("{count,time}")
     List<Map> getStockUpdownCount(@Param("openTime") Date openTime, @Param("curTime") Date curTime, @Param("flag") int flag);
 
-    @MapKey("")
     List<Map> getStockUpDownSectionByTime(@Param("avlDate") Date avlDate);
 
     /**
@@ -97,6 +95,10 @@ public interface StockRtInfoMapper {
      * @param endDate
      * @return
      */
+
     Map<String, String> getStockNewPriceByCode(@Param("code") String code,
                                                @Param("endDate") Date endDate);
+
+
+    List<Map> getStockScreenSecond(@Param("code") String code);
 }

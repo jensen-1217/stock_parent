@@ -4,8 +4,10 @@ import com.google.common.collect.Lists;
 import com.jensen.stock.constant.ParseType;
 import com.jensen.stock.mapper.StockBusinessMapper;
 import com.jensen.stock.mapper.StockMarketIndexInfoMapper;
+import com.jensen.stock.mapper.StockOuterMarketIndexInfoMapper;
 import com.jensen.stock.mapper.StockRtInfoMapper;
 import com.jensen.stock.pojo.entity.StockMarketIndexInfo;
+import com.jensen.stock.pojo.entity.StockOuterMarketIndexInfo;
 import com.jensen.stock.pojo.entity.StockRtInfo;
 import com.jensen.stock.pojo.vo.StockInfoConfig;
 import com.jensen.stock.service.StockTimerTaskService;
@@ -60,11 +62,76 @@ public class StockTimerTaskServiceImpl implements StockTimerTaskService {
 
     @Autowired
     private StockMarketIndexInfoMapper stockMarketIndexInfoMapper;
+    @Autowired
+    private StockOuterMarketIndexInfoMapper stockOuterMarketIndexInfoMapper;
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
     private HttpEntity<String> entity;
+
+
+    @Override
+    public void getOutMarketInfo() {
+        //1.定义采集的url接口
+        String url = stockInfoConfig.getMarketUrl() + String.join(",", stockInfoConfig.getOuter());
+        //2.调用restTemplate采集数据
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        int statusCodeValue = responseEntity.getStatusCodeValue();
+        if (statusCodeValue != 200) {
+            log.error("点前时间点：{},采集数据失败，http状态码：{}", DateTime.now().toString("yyyy-MM-dd HH:mm:ss"), statusCodeValue);
+            return;
+        }
+        String jsData = responseEntity.getBody();
+        log.info("点前时间点：{},采集的原始数据:{}", DateTime.now().toString("yyyy-MM-dd HH:mm:ss"), jsData);
+        //正则表达式
+        String reg = "var hq_str_(.+)=\"(.+)\";";
+        //编译正则表达式
+        Pattern pattern = Pattern.compile(reg);
+        //匹配字符串
+        Matcher matcher = pattern.matcher(jsData);
+        ArrayList<StockOuterMarketIndexInfo> list = new ArrayList<>();
+        //判断是否有匹配的数值
+        while (matcher.find()) {
+            String marketCode = matcher.group(1);
+            String other = matcher.group(2);
+            String[] splitArr = other.split(",");
+            //大盘名称
+            String marketName = splitArr[0];
+            //获取大盘的当前点数
+            BigDecimal curPoint = new BigDecimal(splitArr[1]);
+            //获取大盘涨跌值
+            BigDecimal upDown = new BigDecimal(splitArr[2]);
+            //获取大盘的涨幅
+            BigDecimal rose = new BigDecimal(splitArr[3]);
+            //时间
+            Date now=DateTimeUtil.getDateTimeWithoutSecond(DateTime.now()).toDate();
+            //组装entity对象
+            StockOuterMarketIndexInfo info = StockOuterMarketIndexInfo.builder()
+                    .id(idWorker.nextId())
+                    .marketCode(marketCode)
+                    .marketName(marketName)
+                    .curPoint(curPoint)
+                    .updown(upDown)
+                    .rose(rose)
+                    .curTime(now)
+                    .build();
+            //收集封装的对象，方便批量插入
+            list.add(info);
+        }
+        log.info("采集的当前外盘数据：{}", list);
+        //批量插入
+        if (CollectionUtils.isEmpty(list)) {
+            return;
+        }
+        //TODO 后续完成批量插入功能
+        int count= stockOuterMarketIndexInfoMapper.insertBatch(list);
+        if (count>0) {
+            log.info("当前时间：{},批量插入外盘数据：{}成功",DateTime.now().toString("yyyy-MM-dd HH:mm:ss"),list);
+        }else {
+            log.error("当前时间：{},批量插入外盘数据：{}失败",DateTime.now().toString("yyyy-MM-dd HH:mm:ss"),list);
+        }
+    }
 
     @Override
     public void getInnerMarketInfo() {

@@ -40,4 +40,10 @@ public class TestMapper {
         stockTimerTaskService.getStockRtIndex();
         Thread.sleep(5000);
     }
+
+    @Test
+    public void test03() throws InterruptedException {
+        stockTimerTaskService.getOutMarketInfo();
+        Thread.sleep(5000);
+    }
 }

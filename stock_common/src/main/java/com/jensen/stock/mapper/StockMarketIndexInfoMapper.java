@@ -40,7 +40,6 @@ public interface StockMarketIndexInfoMapper {
      * @param endTime 结束时间
      * @return
      */
-    @MapKey("")
     List<Map> getStockTradeVol(@Param("markedIds") List<String> markedIds,
                                @Param("startTime") Date startTime,
                                @Param("endTime") Date endTime);

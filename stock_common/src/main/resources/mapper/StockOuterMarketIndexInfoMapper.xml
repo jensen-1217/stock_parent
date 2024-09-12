@@ -73,6 +73,19 @@
                 <if test="curTime != null">#{curTime,jdbcType=TIMESTAMP},</if>
         </trim>
     </insert>
+    <insert id="insertBatch">
+        insert into stock_outer_market_index_info
+        ( id,market_code,market_name
+        ,cur_point,updown,rose
+        ,cur_time)
+        values
+        <foreach collection="list" item="out"  separator=",">
+            (#{out.id,jdbcType=BIGINT},#{out.marketCode,jdbcType=CHAR},#{out.marketName,jdbcType=VARCHAR}
+            ,#{out.curPoint,jdbcType=DECIMAL},#{out.updown,jdbcType=DECIMAL},#{out.rose,jdbcType=DECIMAL}
+            ,#{out.curTime,jdbcType=TIMESTAMP})
+        </foreach>
+
+    </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.jensen.stock.pojo.entity.StockOuterMarketIndexInfo">
         update stock_outer_market_index_info
         <set>

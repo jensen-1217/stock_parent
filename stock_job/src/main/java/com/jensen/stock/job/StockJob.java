@@ -19,6 +19,11 @@ public class StockJob {
     @Autowired
     private StockTimerTaskService stockTimerTaskService;
 
+    @XxlJob("getStockOuterMarketInfos")
+    public void getStockOuterMarketInfos(){
+        stockTimerTaskService.getOutMarketInfo();
+    }
+
     /**
      * 定时采集A股数据
      */

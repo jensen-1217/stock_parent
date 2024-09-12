@@ -32,7 +32,6 @@ public interface StockBusinessMapper {
      */
     List<String> getStockIds();
 
-    @MapKey("")
     List<Map> getStocksByCode(String searchStr);
 
     Map<String, String> getStockDescribe(String code);
