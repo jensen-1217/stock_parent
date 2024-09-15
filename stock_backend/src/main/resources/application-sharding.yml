@@ -1,9 +1,63 @@
 dataSources:
-    ds_1:
+    df_1:
         driverClassName: com.mysql.cj.jdbc.Driver
         dataSourceClassName: com.alibaba.druid.pool.DruidDataSource
         url: jdbc:mysql://localhost:3306/stock_sys_db?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai
         username: root
         password: root
+    ds_2021:
+        driverClassName: com.mysql.cj.jdbc.Driver
+        dataSourceClassName: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://localhost:3306/stock_db_2021?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai
+        username: root
+        password: root
+    ds_2022:
+        driverClassName: com.mysql.cj.jdbc.Driver
+        dataSourceClassName: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://localhost:3306/stock_db_2022?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai
+        username: root
+        password: root
+    ds_2023:
+        driverClassName: com.mysql.cj.jdbc.Driver
+        dataSourceClassName: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://localhost:3306/stock_db_2023?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai
+        username: root
+        password: root
+    ds_2024:
+        driverClassName: com.mysql.cj.jdbc.Driver
+        dataSourceClassName: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://localhost:3306/stock_db_2024?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai
+        username: root
+        password: root
+
+rules:
+- !SHARDING
+    tables:
+        stock_block_rt_info:
+            actualDataNodes: ds_${2021..2022}.stock_block_rt_info
+            tableStrategy:
+                standard:
+                    shardingColumn: cur_time
+                    shardingAlgorithmName: auto-custom
+        stock_market_index_info:
+            actualDataNodes: ds_${2021..2022}.stock_market_index_info
+            tableStrategy:
+                standard:
+                    shardingColumn: cur_time
+                    shardingAlgorithmName: auto-custom
+        stock_outer_market_index_info:
+            actualDataNodes: ds_${2021..2022}.stock_outer_market_index_info
+            tableStrategy:
+                standard:
+                    shardingColumn: cur_time
+                    shardingAlgorithmName: auto-custom
+    shardingAlgorithms:
+        auto-custom:
+            type: CLASS_BASED
+            props:
+                strategy: standard
+                algorithmClassName: com.jensen.stock.sharding.CommonShardingAlgorithm4Db
+    broadcastTables:
+        - stock_business
 props:
     sql-show: true

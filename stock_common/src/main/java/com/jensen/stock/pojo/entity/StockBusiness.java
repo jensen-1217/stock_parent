@@ -2,6 +2,8 @@ package com.jensen.stock.pojo.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -9,6 +11,7 @@ import lombok.Data;
  * @TableName stock_business
  */
 @Data
+@Builder
 public class StockBusiness implements Serializable {
     /**
      *  股票编码

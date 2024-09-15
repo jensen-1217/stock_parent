@@ -5,6 +5,7 @@ import com.jensen.stock.mapper.StockBusinessMapper;
 import com.jensen.stock.mapper.StockRtInfoMapper;
 import com.jensen.stock.mapper.SysUserMapper;
 import com.jensen.stock.pojo.domain.StockBlockDomain;
+import com.jensen.stock.pojo.entity.StockBusiness;
 import com.jensen.stock.pojo.entity.SysUser;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
