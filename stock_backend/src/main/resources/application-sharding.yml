@@ -34,29 +34,44 @@ rules:
 - !SHARDING
     tables:
         stock_block_rt_info:
-            actualDataNodes: ds_${2021..2022}.stock_block_rt_info
-            tableStrategy:
+            actualDataNodes: ds_${2021..2024}.stock_block_rt_info
+            databaseStrategy:
                 standard:
                     shardingColumn: cur_time
-                    shardingAlgorithmName: auto-custom
+                    shardingAlgorithmName: algorithm4db
         stock_market_index_info:
-            actualDataNodes: ds_${2021..2022}.stock_market_index_info
-            tableStrategy:
+            actualDataNodes: ds_${2021..2024}.stock_market_index_info
+            databaseStrategy:
                 standard:
                     shardingColumn: cur_time
-                    shardingAlgorithmName: auto-custom
+                    shardingAlgorithmName: algorithm4db
         stock_outer_market_index_info:
-            actualDataNodes: ds_${2021..2022}.stock_outer_market_index_info
+            actualDataNodes: ds_${2021..2024}.stock_outer_market_index_info
+            databaseStrategy:
+                standard:
+                    shardingColumn: cur_time
+                    shardingAlgorithmName: algorithm4db
+        stock_rt_info:
+            actualDataNodes: ds_2021.stock_rt_info_${202101..202112},ds_2022.stock_rt_info_${202201..202212},ds_2023.stock_rt_info_${202301..202312},ds_2024.stock_rt_info_${202401..202412}
+            databaseStrategy:
+                standard:
+                    shardingColumn: cur_time
+                    shardingAlgorithmName: algorithm4db
             tableStrategy:
                 standard:
                     shardingColumn: cur_time
-                    shardingAlgorithmName: auto-custom
+                    shardingAlgorithmName: algorithm4StockRtInfoTable
     shardingAlgorithms:
-        auto-custom:
+        algorithm4db:
             type: CLASS_BASED
             props:
                 strategy: standard
                 algorithmClassName: com.jensen.stock.sharding.CommonShardingAlgorithm4Db
+        algorithm4StockRtInfoTable:
+            type: CLASS_BASED
+            props:
+                strategy: standard
+                algorithmClassName: com.jensen.stock.sharding.ShardingAlgorithm4StockRtInfoTable
     broadcastTables:
         - stock_business
 props:
