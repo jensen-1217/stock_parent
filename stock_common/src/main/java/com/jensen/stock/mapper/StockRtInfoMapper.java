@@ -101,4 +101,8 @@ public interface StockRtInfoMapper {
 
 
     List<Map> getStockScreenSecond(@Param("code") String code);
+
+    List<Date> getStockInfoEveryDay(@Param("code") String code, @Param("startDate")Date startTime, @Param("endDate")Date endTime);
+
+    List<Stock4EvrDayDomain> getStockInfoBySelectEverDay(@Param("code") String code,@Param("dateList")  List<Date> dateList);
 }

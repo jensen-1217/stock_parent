@@ -160,7 +160,8 @@ public class TestRestTemplate {
     }
 
     @Test
-    public void test07(){
+    public void test07() throws InterruptedException {
         stockTimerService.getInnerMarketInfo();
+        Thread.sleep(5000);
     }
 }

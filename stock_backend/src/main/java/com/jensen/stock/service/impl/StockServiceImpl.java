@@ -88,7 +88,7 @@ public class StockServiceImpl implements StockService {
         //获取股票最新交易时间点
         Date lastDate = DateTimeUtil.getLastDate4Stock(DateTime.now()).toDate();
         //TODO mock数据,后续删除
-        lastDate=DateTime.parse("2021-12-21 14:30:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
+        lastDate=DateTime.parse("2021-12-21 14:30:01", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
         //1.调用mapper接口获取数据
         List<StockBlockDomain> infos=stockBlockRtInfoMapper.sectorAllLimit(lastDate);
         //2.组装数据
@@ -106,7 +106,7 @@ public class StockServiceImpl implements StockService {
     public R<List<OuterMarketDomain>> getOuterMarketInfo() {
         Date curDate = DateTimeUtil.getLastDate4Stock(DateTime.now()).toDate();
         //TODO mock测试数据，后期数据通过第三方接口动态获取实时数据 可删除
-        curDate=DateTime.parse("2022-05-18 15:58:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
+        curDate=DateTime.parse("2022-01-01 10:57:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
         List<OuterMarketDomain> data=stockOuterMarketIndexInfoMapper.getMarket(curDate);
         return R.ok(data);
     }
@@ -122,7 +122,7 @@ public class StockServiceImpl implements StockService {
 
         Date curDate = DateTimeUtil.getLastDate4Stock(DateTime.now()).toDate();
         //TODO:后续收集数据后可删除
-        curDate= DateTime.parse("2022-06-07 15:00:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
+        curDate= DateTime.parse("2024-09-13 15:00:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
         PageHelper.startPage(page,pageSize);
         List<StockUpdownDomain> infos= stockRtInfoMapper.getNewestStockInfo(curDate);
         if (CollectionUtils.isEmpty(infos)) {
@@ -398,7 +398,11 @@ public class StockServiceImpl implements StockService {
         //TODO MOCKDATA
 //        startTime=DateTime.parse("2022-01-01 09:30:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
         //2.调用mapper接口获取查询的集合信息-方案1
-        List<Stock4EvrDayDomain> data= stockRtInfoMapper.getStockInfo4EvrDay(code,startTime,endTime);
+//        List<Stock4EvrDayDomain> data= stockRtInfoMapper.getStockInfo4EvrDay(code,startTime,endTime);
+        //先查询指定日期范围内的每日最大时间，封装到list集合中返回实现方法二
+        List<Date> dateList= stockRtInfoMapper.getStockInfoEveryDay(code,startTime,endTime);
+        //再根据收盘时间获取日K线数据
+        List<Stock4EvrDayDomain> data = stockRtInfoMapper.getStockInfoBySelectEverDay(code,dateList);
         //3.组装数据，响应
         return R.ok(data);
     }
