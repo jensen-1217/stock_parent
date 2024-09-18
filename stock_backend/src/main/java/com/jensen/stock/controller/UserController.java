@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.tags.Tags;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -43,11 +44,11 @@ public class UserController {
         return userService.findByUserName(name);
     }
 
-    @Operation(summary = "登录",description = "用户登录")
-    @PostMapping("/login")
-    public R<LoginRespVo> login(@RequestBody LoginReqVo vo){
-        return userService.login(vo);
-    }
+//    @Operation(summary = "登录",description = "用户登录")
+//    @PostMapping("/login")
+//    public R<LoginRespVo> login(@RequestBody LoginReqVo vo){
+//        return userService.login(vo);
+//    }
 
     @Operation(summary = "获取验证码",description = "获取验证码")
     @GetMapping("/captcha")
@@ -55,6 +56,7 @@ public class UserController {
         return userService.getCaptchaCode();
     }
 
+    @PreAuthorize("hasAuthority('sys:user:list')")
     @PostMapping("/users")
     public R<PageResult> getUserListPage(@RequestBody UserPageReqVo userPageReqVo){
         return userService.getUserListPage(userPageReqVo);

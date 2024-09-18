@@ -28,10 +28,10 @@ public class CommonConfig {
      * BCryptPasswordEncoder方法采用SHA-256对密码进行加密
      * @return
      */
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
+//    @Bean
+//    public PasswordEncoder passwordEncoder(){
+//        return new BCryptPasswordEncoder();
+//    }
 
     @Bean
     public IdWorker idWorker(){

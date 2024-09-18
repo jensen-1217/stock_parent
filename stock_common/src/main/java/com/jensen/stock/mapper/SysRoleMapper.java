@@ -1,6 +1,9 @@
 package com.jensen.stock.mapper;
 
 import com.jensen.stock.pojo.entity.SysRole;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * @author 59484
@@ -22,4 +25,5 @@ public interface SysRoleMapper {
 
     int updateByPrimaryKey(SysRole record);
 
+    List<SysRole> getRoleByUserId(@Param("id")Long id);
 }
