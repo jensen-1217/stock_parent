@@ -1,7 +1,7 @@
 spring:
   data:
     redis:
-      host: localhost
+      host: 127.0.0.1
       port: 6379
       database: 0
       lettuce:
@@ -10,4 +10,4 @@ spring:
           max-wait: -1ms
           max-idle: 8
           min-idle: 1
-      timeout: PT10S
+      timeout: PT20S
