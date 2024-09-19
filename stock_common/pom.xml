@@ -110,15 +110,5 @@
         </dependency>
 
     </dependencies>
-    <build>
-        <!--打包名称-->
-        <finalName>${project.artifactId}</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

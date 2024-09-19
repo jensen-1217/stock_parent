@@ -6,7 +6,7 @@ xxl:
       addresses: http://43.163.230.128:8093/xxl-job-admin
     executor:
       appname: jensen-stock-job-executor
-      address: http://je4fdy.natappfree.cc
+      address: ''
       ip:
       port: 7878
       logpath: .\logs
