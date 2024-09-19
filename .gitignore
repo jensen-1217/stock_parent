@@ -4,5 +4,3 @@
 *.log
 *.jar
 logs
-/stock_backend/src/main/resources/application.yml
-/stock_backend/src/main/resources/application-cache.yml
