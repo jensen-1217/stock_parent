@@ -2,6 +2,7 @@ package com.jensen.stock.service.impl;
 
 import com.google.common.collect.Lists;
 import com.jensen.stock.constant.ParseType;
+import com.jensen.stock.face.StockCacheFace;
 import com.jensen.stock.mapper.StockBusinessMapper;
 import com.jensen.stock.mapper.StockMarketIndexInfoMapper;
 import com.jensen.stock.mapper.StockOuterMarketIndexInfoMapper;
@@ -67,6 +68,10 @@ public class StockTimerTaskServiceImpl implements StockTimerTaskService {
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    private StockCacheFace stockCacheFace;
+
 
     private HttpEntity<String> entity;
 
@@ -230,11 +235,12 @@ public class StockTimerTaskServiceImpl implements StockTimerTaskService {
     @Override
     public void getStockRtIndex() {
         //批量获取股票ID集合
-        List<String> stockIds = stockBusinessMapper.getStockIds();
-        //计算出符合sina命名规范的股票id数据
-        stockIds = stockIds.stream().map(id -> {
-            return id.startsWith("6") ? "sh" + id : "sz" + id;
-        }).collect(Collectors.toList());
+//        List<String> stockIds = stockBusinessMapper.getStockIds();
+//        //计算出符合sina命名规范的股票id数据
+//        stockIds = stockIds.stream().map(id -> {
+//            return id.startsWith("6") ? "sh" + id : "sz" + id;
+//        }).collect(Collectors.toList());
+        List<String> stockIds = stockCacheFace.getAllStockCodeWithPredix();
         //设置公共请求头对象
         //设置请求头数据
 //        HttpHeaders headers = new HttpHeaders();
