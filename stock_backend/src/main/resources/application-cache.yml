@@ -11,4 +11,3 @@ spring:
           max-idle: 8
           min-idle: 1
       timeout: PT20S
-      url: 43.163.230.128
