@@ -2,33 +2,33 @@ dataSources:
     df_1:
         driverClassName: com.mysql.cj.jdbc.Driver
         dataSourceClassName: com.alibaba.druid.pool.DruidDataSource
-        url: jdbc:mysql://43.163.230.128:3306/stock_sys_db?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai
+        url: jdbc:mysql://localhost:3306/stock_sys_db?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai
         username: root
-        password: ljx20001217
+        password: root
     ds_2021:
         driverClassName: com.mysql.cj.jdbc.Driver
         dataSourceClassName: com.alibaba.druid.pool.DruidDataSource
-        url: jdbc:mysql://43.163.230.128:3306/stock_db_2021?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai
+        url: jdbc:mysql://localhost:3306/stock_db_2021?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai
         username: root
-        password: ljx20001217
+        password: root
     ds_2022:
         driverClassName: com.mysql.cj.jdbc.Driver
         dataSourceClassName: com.alibaba.druid.pool.DruidDataSource
-        url: jdbc:mysql://43.163.230.128:3306/stock_db_2022?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai
+        url: jdbc:mysql://localhost:3306/stock_db_2022?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai
         username: root
-        password: ljx20001217
+        password: root
     ds_2023:
         driverClassName: com.mysql.cj.jdbc.Driver
         dataSourceClassName: com.alibaba.druid.pool.DruidDataSource
-        url: jdbc:mysql://43.163.230.128:3306/stock_db_2023?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai
+        url: jdbc:mysql://localhost:3306/stock_db_2023?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai
         username: root
-        password: ljx20001217
+        password: root
     ds_2024:
         driverClassName: com.mysql.cj.jdbc.Driver
         dataSourceClassName: com.alibaba.druid.pool.DruidDataSource
-        url: jdbc:mysql://43.163.230.128:3306/stock_db_2024?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai
+        url: jdbc:mysql://localhost:3306/stock_db_2024?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai
         username: root
-        password: ljx20001217
+        password: root
 
 rules:
 - !SHARDING

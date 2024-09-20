@@ -1,7 +1,7 @@
 spring:
   data:
     redis:
-      host: 43.163.230.128
+      host: localhost
       port: 6379
       database: 0
       lettuce:
